@@ -1,9 +1,10 @@
+import "dotenv/config";
 import { filePath } from "./contants.js";
 import { createPineconeVectorStore } from "./pinecone/db.js";
 import { loadPdfPages } from "./prepare/prepare.js";
 import { getTextSplit } from "./prepare/text-splitter.js";
 
-export const serverData = async () => {
+const serverData = async () => {
   try {
     const vectorDb = await createPineconeVectorStore();
 
@@ -11,10 +12,10 @@ export const serverData = async () => {
 
     const documents = await getTextSplit(docs);
 
-    const resp = await vectorDb.addDocuments(documents);
-
-    return resp;
+    await vectorDb.addDocuments(documents);
   } catch (error) {
     console.log("Something went wrong!!!", error);
   }
 };
+
+serverData();
